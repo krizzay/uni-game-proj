@@ -26,6 +26,14 @@ def list_of_items(items):
     """
     pass
 
+    out = ""
+
+    for item in items:
+        out += item["name"]
+        out += ", "
+
+    return out[:-2]
+
 
 def print_room_items(room):
     """This function takes a room as an input and nicely displays a list of items
@@ -312,6 +320,7 @@ def move(exits, direction):
     # Next room to go to
     return rooms[exits[direction]]
 
+#python3 -m doctest (-v) (file)
 
 # This is the entry point of our program
 def main():

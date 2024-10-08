@@ -29,6 +29,13 @@ def filter_words(words, skip_words):
     """
     pass
 
+    out = words
+
+    for skip_word in skip_words:
+        out = [w for w in out if w != skip_word]
+
+    return out
+
     
 def remove_punct(text):
     """This function is used to remove all punctuation
@@ -47,6 +54,9 @@ def remove_punct(text):
     for char in text:
         if not (char in string.punctuation):
             no_punct = no_punct + char
+        else:
+            #words that are seperated by punctuation would be combined if not for this
+            no_punct += " "
 
     return no_punct
 
@@ -77,8 +87,20 @@ def normalise_input(user_input):
 
     """
     # Remove punctuation and convert to lower case
-    no_punct = remove_punct(user_input).lower()
+    no_punct = remove_punct(user_input).lower() 
 
-    #
-    # COMPLETE ME!
-    #
+    words = []
+
+    staging = ""
+    for ch in no_punct:
+        if ch == " " and staging != "":
+            words.append(staging)
+            staging = ""
+        else:
+            staging += ch
+
+    words = filter_words(words, skip_words)
+
+    return words
+        
+
