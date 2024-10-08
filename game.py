@@ -59,6 +59,12 @@ def print_room_items(room):
     """
     pass
 
+    items = room["items"]
+    if len(items) == 0:
+        return
+    
+    print("There is", list_of_items(items), "here")
+
 
 def print_inventory_items(items):
     """This function takes a list of inventory items and displays it nicely, in a
@@ -71,6 +77,11 @@ def print_inventory_items(items):
 
     """
     pass
+
+    if len(items) == 0:
+        return
+    
+    print("You have", list_of_items(items) + ".")
 
 
 def print_room(room):
