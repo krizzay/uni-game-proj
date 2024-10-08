@@ -63,7 +63,8 @@ def print_room_items(room):
     if len(items) == 0:
         return
     
-    print("There is", list_of_items(items), "here")
+    print("There is", list_of_items(items), "here.")
+    print()
 
 
 def print_inventory_items(items):
@@ -82,6 +83,7 @@ def print_inventory_items(items):
         return
     
     print("You have", list_of_items(items) + ".")
+    print()
 
 
 def print_room(room):
@@ -137,10 +139,10 @@ def print_room(room):
     # Display room description
     print(room["description"])
     print()
+    # Display items in room
+    print_room_items(room)
 
-    #
-    # COMPLETE ME!
-    #
+
 
 def exit_leads_to(exits, direction):
     """This function takes a dictionary of exits and a direction (a particular
@@ -209,9 +211,11 @@ def print_menu(exits, room_items, inv_items):
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
 
-    #
-    # COMPLETE ME!
-    #
+    for item in room_items:
+        print("TAKE", item["id"].upper(), "to take", item["name"])
+
+    for item in inv_items:
+        print("DROP", item["id"], "to drop your", item["name"])
     
     print("What do you want to do?")
 
