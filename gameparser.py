@@ -86,12 +86,13 @@ def normalise_input(user_input):
     ['go', 'passage', 'south']
 
     """
+
     # Remove punctuation and convert to lower case
     no_punct = remove_punct(user_input).lower() 
 
     words = []
-
     staging = ""
+
     for ch in no_punct:
         if ch == " " and staging != "":
             words.append(staging)
@@ -99,7 +100,11 @@ def normalise_input(user_input):
         else:
             staging += ch
 
+    if staging != "":
+        words.append(staging)
+
     words = filter_words(words, skip_words)
+
 
     return words
         

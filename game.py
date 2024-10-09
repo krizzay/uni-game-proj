@@ -236,6 +236,7 @@ def is_valid_exit(exits, chosen_exit):
     >>> is_valid_exit(rooms["Parking"]["exits"], "east")
     True
     """
+
     return chosen_exit in exits
 
 
@@ -247,6 +248,14 @@ def execute_go(direction):
     """
     pass
 
+    global current_room
+
+    if is_valid_exit(current_room["exits"], direction):
+        current_room = move(current_room["exits"], direction)
+        print("You move to", current_room["name"])
+    else:
+        print("You cannot go there.")
+
 
 def execute_take(item_id):
     """This function takes an item_id as an argument and moves this item from the
@@ -255,7 +264,20 @@ def execute_take(item_id):
     "You cannot take that."
     """
     pass
-    
+
+    print(current_room)
+
+    # searches if any item in the room matches the item_id
+    # if so then add the item to the inventory, print a message and delete the item
+    for item in current_room["items"]:
+        if item["id"] == item_id:
+            inventory.append(item)
+            print("You took", item["name"])
+            current_room["items"].remove(item)
+            return
+    #this only executes if no item was taken because of return statement
+    print("You cannot take that")    
+      
 
 def execute_drop(item_id):
     """This function takes an item_id as an argument and moves this item from the
@@ -263,6 +285,17 @@ def execute_drop(item_id):
     no such item in the inventory, this function prints "You cannot drop that."
     """
     pass
+
+    # searches if any item in inventory matches the item_id
+    # if so then add the item to the room, print a message and delete the item
+    for item in inventory:
+        if item["id"] == item_id:
+            current_room["items"].append(item)
+            print("You dropped", item["name"])
+            inventory.remove(item)
+            return
+    #this only executes if no item was dropped
+    print("You cannot drop that")
     
 
 def execute_command(command):
@@ -278,6 +311,7 @@ def execute_command(command):
 
     if command[0] == "go":
         if len(command) > 1:
+            #for some reason python thinks that current_room is a local variable in execute_go
             execute_go(command[1])
         else:
             print("Go where?")
@@ -333,13 +367,14 @@ def move(exits, direction):
     """
 
     # Next room to go to
+    current_room = rooms[exits[direction]]
     return rooms[exits[direction]]
 
 #python3 -m doctest (-v) (file)
 
 # This is the entry point of our program
 def main():
-
+    print(current_room)
     # Main game loop
     while True:
         # Display game status (room description, inventory etc.)
