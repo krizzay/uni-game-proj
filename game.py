@@ -34,6 +34,19 @@ def list_of_items(items):
 
     return out[:-2]
 
+def check_if_overweight(items, weight_limit):
+
+    total_weight = 0
+
+    for item in items:
+        total_weight += item["mass"]
+
+    if total_weight > weight_limit:
+        return True
+    
+    return False
+
+
 
 def print_room_items(room):
     """This function takes a room as an input and nicely displays a list of items
@@ -250,6 +263,10 @@ def execute_go(direction):
 
     global current_room
 
+    if check_if_overweight(inventory, weight_limit):
+        print("You are carrying too much to move!")
+        return
+
     if is_valid_exit(current_room["exits"], direction):
         current_room = move(current_room["exits"], direction)
         print("You move to", current_room["name"])
@@ -274,6 +291,9 @@ def execute_take(item_id):
             inventory.append(item)
             print("You took", item["name"])
             current_room["items"].remove(item)
+
+            if check_if_overweight(inventory, weight_limit):
+                print("You are carrying to much to move!")
             return
     #this only executes if no item was taken because of return statement
     print("You cannot take that")    
@@ -370,11 +390,25 @@ def move(exits, direction):
     current_room = rooms[exits[direction]]
     return rooms[exits[direction]]
 
+def check_win_condition():
+    if current_room == rooms["Reception"]:
+        for item in all_items:
+            if item not in current_room["items"]:
+                # win condition not met
+                return False
+        
+        # win condition met
+        return True
+
 #python3 -m doctest (-v) (file)
 
 # This is the entry point of our program
 def main():
-    print(current_room)
+    print("Your goal in this game is to return all the items back to the reception\n")
+
+    global weight_limit
+    weight_limit = 3
+
     # Main game loop
     while True:
         # Display game status (room description, inventory etc.)
@@ -387,6 +421,11 @@ def main():
         # Execute the player's command
         execute_command(command)
 
+        if check_win_condition():
+            break
+
+    print("You won the game!\n")
+    return
 
 
 # Are we being run as a script? If so, run main().
